@@ -1,7 +1,10 @@
 package com.atguigu.lease.web.admin.service;
 
 import com.atguigu.lease.model.entity.ApartmentInfo;
+import com.atguigu.lease.web.admin.vo.apartment.ApartmentItemVo;
+import com.atguigu.lease.web.admin.vo.apartment.ApartmentQueryVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentSubmitVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +16,7 @@ public interface ApartmentInfoService extends IService<ApartmentInfo> {
 
 	//保存或更新公寓信息
 	void saveOrUpdateApart(ApartmentSubmitVo apartmentSubmitVo);
+
+	//根据条件分页查询公寓列表
+	IPage<ApartmentItemVo> pageApartmentQueryVo(IPage<ApartmentItemVo> page, ApartmentQueryVo queryVo);
 }

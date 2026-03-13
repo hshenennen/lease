@@ -25,3 +25,7 @@ minio:
   access-key: minioadmin
   secret-key: minioadmin
   bucket-name: lease
+
+#将对象做打平处理
+springdoc:
+  default-flat-param-object: true

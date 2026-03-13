@@ -3,5 +3,63 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.atguigu.lease.web.admin.mapper.ApartmentInfoMapper">
-
+    <!--    IFNULL(表达式1, 表达式2) 如果表达式1的值不为NULL，返回表达式1的值,为NULl的时候，为表达式2 -->
+    <select id="pageApartmentQueryVo" resultType="com.atguigu.lease.web.admin.vo.apartment.ApartmentItemVo">
+        select ai.id,
+        ai.name,
+        ai.introduction,
+        ai.district_id,
+        ai.district_name,
+        ai.city_id,
+        ai.city_name,
+        ai.province_id,
+        ai.province_name,
+        ai.address_detail,
+        ai.latitude,
+        ai.longitude,
+        ai.phone,
+        ai.is_release,
+        ifnull(ri.rSum,0) total_room_count,
+        ifnull(ri.rSum,0)-ifnull(la.rNoNum,0) free_room_count
+        from (select id,
+        name,
+        introduction,
+        district_id,
+        district_name,
+        city_id,
+        city_name,
+        province_id,
+        province_name,
+        address_detail,
+        latitude,
+        longitude,
+        phone,
+        is_release
+        from apartment_info
+        <where>
+            is_deleted = 0
+            <if test="queryVo.provinceId != null">
+                and province_id = #{queryVo.provinceId}
+            </if>
+            <if test="queryVo.cityId != null">
+                and city_id = #{queryVo.cityId}
+            </if>
+            <if test="queryVo.districtId != null">
+                and district_id = #{queryVo.districtId}
+            </if>
+        </where>
+        ) ai
+        left join
+        (select apartment_id, count(*) rSum
+        from room_info
+        where is_deleted = 0
+        and is_release = 1
+        group by apartment_id) ri on ai.id = ri.apartment_id
+        left join
+        (select apartment_id, count(*) rNoNum
+        from lease_agreement
+        where is_deleted = 0
+        and status in (2, 5)
+        group by apartment_id) la on ai.id=la.apartment_id
+    </select>
 </mapper>
