@@ -14,6 +14,8 @@ import java.util.List;
 */
 public interface FeeKeyMapper extends BaseMapper<FeeKey> {
 
+	//查询全部杂费名称和杂费值列表
+	List<FeeKeyVo> listFeeInfo();
 }
 
 
