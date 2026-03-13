@@ -21,14 +21,17 @@ public class BaseEntity implements Serializable {
     private Date createTime;
 
     @Schema(description = "更新时间")
+    //字段配置触发填充的时机，@TableField`注解中的fill属性
     @TableField(value = "update_time",fill = FieldFill.UPDATE)
-    @JsonIgnore
+    @JsonIgnore//只需在实体类中的相应字段添加`@JsonIgnore`注解，该字段就会在序列化时被忽略
     private Date updateTime;
 
     @Schema(description = "逻辑删除")
     @TableField("is_deleted")
     @JsonIgnore
-    @TableLogic
+    @TableLogic//逻辑删除功能
+    //在实体类中的删除标识字段上增加`@TableLogic`注解
+    //它可以自动为查询操作增加`is_deleted=0`过滤条件，并将删除操作转为更新语句
     private Byte isDeleted;
 
 }

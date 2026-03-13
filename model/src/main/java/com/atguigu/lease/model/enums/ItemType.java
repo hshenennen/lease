@@ -11,8 +11,8 @@ public enum ItemType implements BaseEnum {
     ROOM(2, "房间");
 
 
-    @EnumValue
-    @JsonValue
+    @EnumValue//返回前端的唯一表示
+    @JsonValue//自动映射，枚举类型转换成前端需要的类型
     private Integer code;
     private String name;
 

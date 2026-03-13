@@ -7,6 +7,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+//在MCV中声明我们的枚举类型转换
 public class WebMvcConfiguration implements WebMvcConfigurer {
 
 	//@Autowired

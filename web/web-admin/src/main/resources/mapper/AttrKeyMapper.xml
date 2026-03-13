@@ -2,6 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--resultMap是我们的实体类型和数据库中的名字不一样，它就找不到字段-->
+<!--property是实体类的名称，column是数据库中的名称-->
 <mapper namespace="com.atguigu.lease.web.admin.mapper.AttrKeyMapper">
 
     <resultMap id="BaseResultMap" type="com.atguigu.lease.web.admin.vo.attr.AttrKeyVo">
@@ -23,4 +25,5 @@
                  left join attr_value v on k.id = v.attr_key_id and v.is_deleted = 0
         where k.is_deleted = 0
     </select>
+<!--   有两个表的是时候，逻辑删除的字段，where只放主表中 -->
 </mapper>

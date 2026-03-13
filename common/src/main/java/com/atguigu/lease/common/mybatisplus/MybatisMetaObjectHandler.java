@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
+//当写入数据时，Mybatis-Plus会自动将实体对象的create_time字段填充为当前时间，
+// 当更新数据时，则会自动将实体对象的update_time字段填充为当前时间。
 public class MybatisMetaObjectHandler implements MetaObjectHandler {
 	@Override
 	public void insertFill(MetaObject metaObject) {
