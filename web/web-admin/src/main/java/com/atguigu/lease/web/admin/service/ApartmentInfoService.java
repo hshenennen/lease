@@ -1,6 +1,7 @@
 package com.atguigu.lease.web.admin.service;
 
 import com.atguigu.lease.model.entity.ApartmentInfo;
+import com.atguigu.lease.web.admin.vo.apartment.ApartmentDetailVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentItemVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentQueryVo;
 import com.atguigu.lease.web.admin.vo.apartment.ApartmentSubmitVo;
@@ -19,4 +20,7 @@ public interface ApartmentInfoService extends IService<ApartmentInfo> {
 
 	//根据条件分页查询公寓列表
 	IPage<ApartmentItemVo> pageApartmentQueryVo(IPage<ApartmentItemVo> page, ApartmentQueryVo queryVo);
+
+	//根据ID获取公寓详细信息
+	ApartmentDetailVo getDApartmentDetailVoById(Long id);
 }
