@@ -6,8 +6,11 @@ import com.atguigu.lease.web.admin.mapper.GraphInfoMapper;
 import com.atguigu.lease.web.admin.mapper.RoomInfoMapper;
 import com.atguigu.lease.web.admin.service.*;
 import com.atguigu.lease.web.admin.vo.graph.GraphVo;
+import com.atguigu.lease.web.admin.vo.room.RoomItemVo;
+import com.atguigu.lease.web.admin.vo.room.RoomQueryVo;
 import com.atguigu.lease.web.admin.vo.room.RoomSubmitVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,6 +46,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 
 	@Autowired
 	private RoomLeaseTermService roomLeaseTermService;//可选租期-Service
+
+	@Autowired
+	private RoomInfoMapper roomInfoMapper;
 
 	//保存或更新房间信息
 	@Override
@@ -130,7 +136,7 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		List<RoomLabel> roomLabelList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(labelInfoIds)) {
 			for (Long labelInfoId : labelInfoIds) {
-				RoomLabel roomLabel =  RoomLabel.builder()
+				RoomLabel roomLabel = RoomLabel.builder()
 						.labelId(labelInfoId)
 						.roomId(roomSubmitVo.getId())
 						.build();
@@ -167,6 +173,12 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 			roomLeaseTermService.saveBatch(roomLeaseTermList);
 		}
 
+	}
+
+	//根据条件分页查询房间列表
+	@Override
+	public IPage<RoomItemVo> pageRoomItemByQuery(IPage<RoomItemVo> page, RoomQueryVo queryVo) {
+		return roomInfoMapper.pageRoomItemByQuery(page,queryVo);
 	}
 }
 

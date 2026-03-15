@@ -17,4 +17,7 @@ public interface RoomInfoService extends IService<RoomInfo> {
 
 	//保存或更新房间信息
 	void saveOrUpdateRoomSubmitVo(RoomSubmitVo roomSubmitVo);
+
+	//根据条件分页查询房间列表
+	IPage<RoomItemVo> pageRoomItemByQuery(IPage<RoomItemVo> page, RoomQueryVo queryVo);
 }
