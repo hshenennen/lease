@@ -99,12 +99,14 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 		if (!CollectionUtils.isEmpty(graphVoList)) {
 			List<GraphInfo> graphInfoList = new ArrayList<>();
 			for (GraphVo graphVo : graphVoList) {
-				GraphInfo graphInfo = new GraphInfo();
 				//补全信息
-				graphInfo.setName(graphVo.getName());
-				graphInfo.setItemType(ItemType.APARTMENT);
-				graphInfo.setItemId(apartmentSubmitVo.getId());
-				graphInfo.setUrl(graphVo.getUrl());
+				GraphInfo graphInfo = GraphInfo.builder()
+						.name(graphVo.getName())
+						.itemId(apartmentSubmitVo.getId())
+						.itemType(ItemType.APARTMENT)
+						.url(graphVo.getUrl())
+						.build();
+
 				//添加到集合中
 				graphInfoList.add(graphInfo);
 			}
