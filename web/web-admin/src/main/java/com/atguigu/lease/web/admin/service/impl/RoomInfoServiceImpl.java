@@ -243,6 +243,42 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 
 		return roomDetailVo;
 	}
+
+	//根据id删除房间信息
+	@Override
+	public void removeRoomById(Long id) {
+		//删除房间的基本信息
+		super.removeById(id);
+
+		//删除房间配套的信息
+		//1.删除图片
+		LambdaQueryWrapper<GraphInfo> graphInfoLambdaQueryWrapper = new LambdaQueryWrapper<GraphInfo>()
+				.eq(GraphInfo::getItemType, ItemType.ROOM)
+				.eq(GraphInfo::getItemId, id);
+		graphInfoService.remove(graphInfoLambdaQueryWrapper);
+		//2.删除属性
+		LambdaQueryWrapper<RoomAttrValue> attrValueLambdaQueryWrapper = new LambdaQueryWrapper<RoomAttrValue>()
+				.eq(RoomAttrValue::getRoomId, id);
+		roomAttrValueService.remove(attrValueLambdaQueryWrapper);
+		//3.删除配套
+		LambdaQueryWrapper<RoomFacility> roomFacilityLambdaQueryWrapper = new LambdaQueryWrapper<RoomFacility>()
+				.eq(RoomFacility::getRoomId, id);
+		roomFacilityService.remove(roomFacilityLambdaQueryWrapper);
+		//4.删除标签
+		LambdaQueryWrapper<RoomLabel> roomLabelLambdaQueryWrapper = new LambdaQueryWrapper<RoomLabel>()
+				.eq(RoomLabel::getRoomId, id);
+		roomLabelService.remove(roomLabelLambdaQueryWrapper);
+		//5.删除支付方式
+		LambdaQueryWrapper<RoomPaymentType> roomPaymentTypeLambdaQueryWrapper = new LambdaQueryWrapper<RoomPaymentType>()
+				.eq(RoomPaymentType::getRoomId, id);
+		roomPaymentTypeService.remove(roomPaymentTypeLambdaQueryWrapper);
+
+		//6.删除可选租期
+		LambdaQueryWrapper<RoomLeaseTerm> roomLeaseTermLambdaQueryWrapper = new LambdaQueryWrapper<RoomLeaseTerm>()
+				.eq(RoomLeaseTerm::getRoomId, id);
+		roomLeaseTermService.remove(roomLeaseTermLambdaQueryWrapper);
+
+	}
 }
 
 

@@ -23,4 +23,7 @@ public interface RoomInfoService extends IService<RoomInfo> {
 
 	//根据id获取房间详细信息
 	RoomDetailVo getRoomDetailVoByRoomId(Long id);
+
+	//根据id删除房间信息
+	void removeRoomById(Long id);
 }
