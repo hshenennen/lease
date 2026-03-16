@@ -1,12 +1,13 @@
 package com.atguigu.lease.web.admin.service.impl;
 
-import com.atguigu.lease.model.entity.LeaseAgreement;
-import com.atguigu.lease.web.admin.mapper.LeaseAgreementMapper;
+import com.atguigu.lease.model.entity.*;
+import com.atguigu.lease.web.admin.mapper.*;
 import com.atguigu.lease.web.admin.service.LeaseAgreementService;
 import com.atguigu.lease.web.admin.vo.agreement.AgreementQueryVo;
 import com.atguigu.lease.web.admin.vo.agreement.AgreementVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,10 +23,42 @@ public class LeaseAgreementServiceImpl extends ServiceImpl<LeaseAgreementMapper,
 	@Autowired
 	private LeaseAgreementMapper leaseAgreementMapper;
 
+	@Autowired
+	private ApartmentInfoMapper apartmentInfoMapper;//公寓
+
+	@Autowired
+	private RoomInfoMapper roomInfoMapper;//房间
+
+	@Autowired
+	private PaymentTypeMapper paymentTypeMapper;//支付方式
+
+	@Autowired
+	private LeaseTermMapper leaseTermMapper;//租期
+
 	//根据条件分页查询租约列表
 	@Override
 	public IPage<AgreementVo> pageAgreementQueryVo(IPage<AgreementVo> page, AgreementQueryVo queryVo) {
 		return leaseAgreementMapper.pageAgreementQueryVo(page, queryVo);
+	}
+
+	//根据id查询租约信息
+	@Override
+	public AgreementVo getAgreementVoById(Long id) {
+		LeaseAgreement leaseAgreement = leaseAgreementMapper.selectById(id);//租约基本信息
+		ApartmentInfo apartmentInfo = apartmentInfoMapper.selectById(leaseAgreement.getApartmentId());//签约公寓信息
+		RoomInfo roomInfo = roomInfoMapper.selectById(leaseAgreement.getRoomId());//签约房间信息
+		PaymentType paymentType = paymentTypeMapper.selectById(leaseAgreement.getPaymentTypeId());//支付方式
+		LeaseTerm leaseTerm = leaseTermMapper.selectById(leaseAgreement.getLeaseTermId());//租期
+
+		//封装返回值
+		AgreementVo agreementVo = new AgreementVo();
+		BeanUtils.copyProperties(leaseAgreement, agreementVo);
+		agreementVo.setApartmentInfo(apartmentInfo);
+		agreementVo.setRoomInfo(roomInfo);
+		agreementVo.setPaymentType(paymentType);
+		agreementVo.setLeaseTerm(leaseTerm);
+
+		return agreementVo;
 	}
 }
 
