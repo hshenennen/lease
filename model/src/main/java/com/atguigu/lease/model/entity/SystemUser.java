@@ -21,7 +21,7 @@ public class SystemUser extends BaseEntity {
     private String username;
 
     @Schema(description = "密码")
-    @TableField(value = "password")
+    @TableField(value = "password",select = false)//密码不查询
     private String password;
 
     @Schema(description = "姓名")

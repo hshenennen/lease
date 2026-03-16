@@ -15,4 +15,7 @@ public interface SystemUserService extends IService<SystemUser> {
 
 	//根据条件分页查询后台用户列表
 	IPage<SystemUserItemVo> pageSystemUserItemVo(IPage<SystemUser> page, SystemUserQueryVo queryVo);
+
+	//根据ID查询后台用户信息
+	SystemUserItemVo getSystemUserItemVoById(Long id);
 }
