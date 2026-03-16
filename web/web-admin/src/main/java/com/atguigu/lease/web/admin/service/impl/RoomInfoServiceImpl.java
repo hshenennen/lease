@@ -79,6 +79,7 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 	public void saveOrUpdateRoomSubmitVo(RoomSubmitVo roomSubmitVo) {
 		//先判断是新增还是修改
 		Boolean isUpdate = roomSubmitVo.getId() != null;
+		super.saveOrUpdate(roomSubmitVo);//填入房间的基本信息
 		if (isUpdate) {//有id，先删除，再添加
 			//1.删除图片
 			LambdaQueryWrapper<GraphInfo> graphInfoLambdaQueryWrapper = new LambdaQueryWrapper<GraphInfo>()
