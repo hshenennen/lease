@@ -22,7 +22,7 @@ public class UserInfo extends BaseEntity {
     private String phone;
 
     @Schema(description = "密码")
-    @TableField(value = "password")
+    @TableField(value = "password",select = false)//设置密码在通用Service和Mapper中，不进行查询操作
     private String password;
 
     @Schema(description = "头像url")

@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 */
 public interface SystemUserMapper extends BaseMapper<SystemUser> {
 
+	//根据条件分页查询后台用户列表
+	IPage<SystemUserItemVo> pageSystemUserItemVo(IPage<SystemUser> page, SystemUserQueryVo queryVo);
 }
 
 

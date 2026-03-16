@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SystemUserService extends IService<SystemUser> {
 
+	//根据条件分页查询后台用户列表
+	IPage<SystemUserItemVo> pageSystemUserItemVo(IPage<SystemUser> page, SystemUserQueryVo queryVo);
 }
