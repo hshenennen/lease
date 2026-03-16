@@ -7,6 +7,7 @@ import com.atguigu.lease.model.enums.BaseStatus;
 import com.atguigu.lease.web.admin.service.SystemUserService;
 import com.atguigu.lease.web.admin.vo.system.user.SystemUserItemVo;
 import com.atguigu.lease.web.admin.vo.system.user.SystemUserQueryVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +53,10 @@ public class SystemUserController {
 	@Operation(summary = "判断后台用户名是否可用")
 	@GetMapping("isUserNameAvailable")
 	public Result<Boolean> isUsernameExists(@RequestParam String username) {
-		return Result.ok();
+		LambdaQueryWrapper<SystemUser> systemUserLambdaQueryWrapper = new LambdaQueryWrapper<SystemUser>()
+				.eq(SystemUser::getUsername, username);
+		long count = systemUserService.count(systemUserLambdaQueryWrapper);//名字相同就是1,没有就是0
+		return Result.ok(count == 0);
 	}
 
 	@DeleteMapping("deleteById")
