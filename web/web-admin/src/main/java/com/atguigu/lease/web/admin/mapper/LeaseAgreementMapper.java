@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 */
 public interface LeaseAgreementMapper extends BaseMapper<LeaseAgreement> {
 
+	//根据条件分页查询租约列表
+	IPage<AgreementVo> pageAgreementQueryVo(IPage<AgreementVo> page, AgreementQueryVo queryVo);
 }
 
 

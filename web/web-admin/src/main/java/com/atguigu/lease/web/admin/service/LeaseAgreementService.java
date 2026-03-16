@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface LeaseAgreementService extends IService<LeaseAgreement> {
 
+	//根据条件分页查询租约列表
+	IPage<AgreementVo> pageAgreementQueryVo(IPage<AgreementVo> page, AgreementQueryVo queryVo);
 }
