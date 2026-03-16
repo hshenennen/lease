@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ViewAppointmentService extends IService<ViewAppointment> {
 
+	//分页查询预约信息
+	IPage<AppointmentVo> pageAppointmentQueryVo(IPage<AppointmentVo> page, AppointmentQueryVo queryVo);
 }

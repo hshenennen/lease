@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 */
 public interface ViewAppointmentMapper extends BaseMapper<ViewAppointment> {
 
+	//分页查询预约信息
+	IPage<AppointmentVo> pageAppointmentQueryVo(IPage<AppointmentVo> page, AppointmentQueryVo queryVo);
 }
 
 
