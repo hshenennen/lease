@@ -70,7 +70,11 @@ public class RoomController {
 	@GetMapping("listBasicByApartmentId")
 	@Operation(summary = "根据公寓id查询房间列表")
 	public Result<List<RoomInfo>> listBasicByApartmentId(Long id) {
-		return Result.ok();
+		LambdaQueryWrapper<RoomInfo> roomInfoLambdaQueryWrapper = new LambdaQueryWrapper<RoomInfo>()
+				.eq(RoomInfo::getApartmentId, id)
+				.eq(RoomInfo::getIsRelease, ReleaseStatus.RELEASED);
+		List<RoomInfo> roomInfoList = roomInfoService.list(roomInfoLambdaQueryWrapper);
+		return Result.ok(roomInfoList);
 	}
 
 }
