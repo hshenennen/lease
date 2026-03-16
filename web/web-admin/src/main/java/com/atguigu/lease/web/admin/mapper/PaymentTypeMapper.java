@@ -13,6 +13,8 @@ import java.util.List;
  */
 public interface PaymentTypeMapper extends BaseMapper<PaymentType> {
 
+	//房间
+	List<PaymentType> selectListByRoomId(Long id);
 }
 
 
