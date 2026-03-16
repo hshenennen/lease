@@ -72,7 +72,7 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 		super.saveOrUpdate(apartmentSubmitVo);//填入公寓的基本信息
 
 		//是修改直接全部删除，再添加
-		if (!isUpdate) {//修改
+		if (isUpdate) {//修改
 			//1.删除图片列表
 			LambdaQueryWrapper<GraphInfo> graphInfoLambdaQueryWrapper = new LambdaQueryWrapper<GraphInfo>()
 					.eq(GraphInfo::getItemType, ItemType.APARTMENT)//公寓
@@ -100,12 +100,11 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 			List<GraphInfo> graphInfoList = new ArrayList<>();
 			for (GraphVo graphVo : graphVoList) {
 				//补全信息
-				GraphInfo graphInfo = GraphInfo.builder()
-						.name(graphVo.getName())
-						.itemId(apartmentSubmitVo.getId())
-						.itemType(ItemType.APARTMENT)
-						.url(graphVo.getUrl())
-						.build();
+				GraphInfo graphInfo = new GraphInfo();
+				graphInfo.setItemType(ItemType.APARTMENT);
+				graphInfo.setItemId(apartmentSubmitVo.getId());
+				graphInfo.setName(graphVo.getName());
+				graphInfo.setUrl(graphVo.getUrl());
 
 				//添加到集合中
 				graphInfoList.add(graphInfo);

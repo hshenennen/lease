@@ -75,7 +75,7 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 
 	//保存或更新房间信息
 	@Override
-	@Transactional//事件管理
+	//@Transactional//事件管理
 	public void saveOrUpdateRoomSubmitVo(RoomSubmitVo roomSubmitVo) {
 		//先判断是新增还是修改
 		Boolean isUpdate = roomSubmitVo.getId() != null;
@@ -114,12 +114,11 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		if (!CollectionUtils.isEmpty(graphVoList)) {//非空判断
 			for (GraphVo graphVo : graphVoList) {
 				//补全信息
-				GraphInfo graphInfo = GraphInfo.builder()
-						.name(graphVo.getName())
-						.itemType(ItemType.ROOM)
-						.itemId(roomSubmitVo.getId())
-						.url(graphVo.getUrl())
-						.build();
+				GraphInfo graphInfo = new GraphInfo();
+				graphInfo.setItemType(ItemType.ROOM);
+				graphInfo.setItemId(roomSubmitVo.getId());
+				graphInfo.setName(graphVo.getName());
+				graphInfo.setUrl(graphVo.getUrl());
 				//添加到集合中
 				graphInfoList.add(graphInfo);
 			}
@@ -131,10 +130,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		List<RoomAttrValue> roomAttrValueList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(attrValueIds)) {
 			for (Long attrValueId : attrValueIds) {
-				RoomAttrValue roomAttrValue = RoomAttrValue.builder()
-						.attrValueId(attrValueId)
-						.roomId(roomSubmitVo.getId())
-						.build();
+				RoomAttrValue roomAttrValue = new RoomAttrValue();
+				roomAttrValue.setAttrValueId(attrValueId);
+				roomAttrValue.setRoomId(roomSubmitVo.getId());
 				roomAttrValueList.add(roomAttrValue);
 			}
 			roomAttrValueService.saveBatch(roomAttrValueList);
@@ -145,10 +143,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		List<RoomFacility> roomFacilityList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(facilityInfoIds)) {
 			for (Long facilityInfoId : facilityInfoIds) {
-				RoomFacility roomFacility = RoomFacility.builder()
-						.facilityId(facilityInfoId)
-						.roomId(roomSubmitVo.getId())
-						.build();
+				RoomFacility roomFacility = new RoomFacility();
+				roomFacility.setRoomId(roomSubmitVo.getId());
+				roomFacility.setFacilityId(facilityInfoId);
 				roomFacilityList.add(roomFacility);
 			}
 			roomFacilityService.saveBatch(roomFacilityList);
@@ -159,10 +156,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		List<RoomLabel> roomLabelList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(labelInfoIds)) {
 			for (Long labelInfoId : labelInfoIds) {
-				RoomLabel roomLabel = RoomLabel.builder()
-						.labelId(labelInfoId)
-						.roomId(roomSubmitVo.getId())
-						.build();
+				RoomLabel roomLabel = new RoomLabel();
+				roomLabel.setLabelId(labelInfoId);
+				roomLabel.setRoomId(roomSubmitVo.getId());
 				roomLabelList.add(roomLabel);
 			}
 			roomLabelService.saveBatch(roomLabelList);
@@ -173,10 +169,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		List<RoomPaymentType> roomPaymentTypeArrayList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(paymentTypeIds)) {
 			for (Long paymentTypeId : paymentTypeIds) {
-				RoomPaymentType roomPaymentType = RoomPaymentType.builder()
-						.roomId(roomSubmitVo.getId())
-						.paymentTypeId(paymentTypeId)
-						.build();
+				RoomPaymentType roomPaymentType = new RoomPaymentType();
+				roomPaymentType.setPaymentTypeId(paymentTypeId);
+				roomPaymentType.setRoomId(roomSubmitVo.getId());
 				roomPaymentTypeArrayList.add(roomPaymentType);
 			}
 			roomPaymentTypeService.saveBatch(roomPaymentTypeArrayList);
@@ -187,10 +182,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		List<RoomLeaseTerm> roomLeaseTermList = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(leaseTermIds)) {
 			for (Long leaseTermId : leaseTermIds) {
-				RoomLeaseTerm roomLeaseTerm = RoomLeaseTerm.builder()
-						.roomId(roomSubmitVo.getId())
-						.leaseTermId(leaseTermId)
-						.build();
+				RoomLeaseTerm roomLeaseTerm = new RoomLeaseTerm();
+				roomLeaseTerm.setLeaseTermId(leaseTermId);
+				roomLeaseTerm.setRoomId(roomSubmitVo.getId());
 				roomLeaseTermList.add(roomLeaseTerm);
 			}
 			roomLeaseTermService.saveBatch(roomLeaseTermList);
