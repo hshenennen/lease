@@ -10,6 +10,7 @@ import com.atguigu.lease.web.admin.mapper.SystemUserMapper;
 import com.atguigu.lease.web.admin.service.LoginService;
 import com.atguigu.lease.web.admin.vo.login.CaptchaVo;
 import com.atguigu.lease.web.admin.vo.login.LoginVo;
+import com.atguigu.lease.web.admin.vo.system.user.SystemUserInfoVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.wf.captcha.SpecCaptcha;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -43,6 +44,7 @@ public class LoginServiceImpl implements LoginService {
 		return new CaptchaVo(specCaptcha.toBase64(), key);
 	}
 
+	//登录
 	@Override
 	public String login(LoginVo loginVo) {
 		//判断captchaCode是否为空，若为空，则直接响应验证码为空
@@ -74,5 +76,18 @@ public class LoginServiceImpl implements LoginService {
 
 		//创建并返回token
 		return JwtUtil.createToken(systemUser.getId(), systemUser.getUsername());
+	}
+
+	//获取登陆用户个人信息
+	@Override
+	public SystemUserInfoVo getSystemUserInfoVoById(Long userId) {
+		//获取员工信息
+		SystemUser systemUser = systemUserMapper.selectById(userId);
+
+		//封装返回值
+		SystemUserInfoVo systemUserInfoVo = new SystemUserInfoVo();
+		systemUserInfoVo.setName(systemUser.getName());
+		systemUserInfoVo.setAvatarUrl(systemUser.getAvatarUrl());
+		return systemUserInfoVo;
 	}
 }

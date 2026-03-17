@@ -11,4 +11,7 @@ public interface LoginService {
 
 	//登录
 	String login(LoginVo loginVo);
+
+	//获取登陆用户个人信息
+	SystemUserInfoVo getSystemUserInfoVoById(Long userId);
 }
