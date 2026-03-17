@@ -67,6 +67,7 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 
 	//保存或更新公寓信息
 	@Override
+	@Transactional
 	public void saveOrUpdateApart(ApartmentSubmitVo apartmentSubmitVo) {
 		Boolean isUpdate = apartmentSubmitVo.getId() != null;
 		super.saveOrUpdate(apartmentSubmitVo);//填入公寓的基本信息
@@ -159,6 +160,7 @@ public class ApartmentInfoServiceImpl extends ServiceImpl<ApartmentInfoMapper, A
 
 	//根据ID获取公寓详细信息
 	@Override
+	@Transactional
 	public ApartmentDetailVo getDApartmentDetailVoById(Long id) {
 		//1.查询ApartmentInfo
 		ApartmentInfo apartmentInfo = apartmentInfoMapper.selectById(id);
