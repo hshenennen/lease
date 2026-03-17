@@ -63,7 +63,7 @@ public class ApartmentController {
 	public Result updateReleaseStatusById(@RequestParam Long id, @RequestParam ReleaseStatus status) {
 		LambdaUpdateWrapper<ApartmentInfo> apartmentInfoLambdaUpdateWrapper = new LambdaUpdateWrapper<ApartmentInfo>()
 				.eq(ApartmentInfo::getId, id)
-				.eq(ApartmentInfo::getIsRelease, status);
+				.set(ApartmentInfo::getIsRelease, status);
 		apartmentInfoService.update(apartmentInfoLambdaUpdateWrapper);
 		return Result.ok();
 	}
