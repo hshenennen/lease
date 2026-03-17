@@ -8,4 +8,7 @@ public interface LoginService {
 
 	//获取图形验证码
 	CaptchaVo getCaptcha();
+
+	//登录
+	String login(LoginVo loginVo);
 }
