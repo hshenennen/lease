@@ -16,6 +16,11 @@ spring:
       pool-name: SPHHikariPool # 连接池名称
   jackson:
     time-zone: GMT+8 #配置时区：东八区
+  data:  # redis的配置
+    redis:
+      host: 192.168.100.101
+      port: 6379
+      database: 0 #默认数据库
 
 #用于打印框架生成的sql语句，便于调试
 mybatis-plus:
