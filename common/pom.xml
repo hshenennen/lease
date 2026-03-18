@@ -77,5 +77,8 @@
             <artifactId>jjwt-jackson</artifactId>
             <scope>runtime</scope>
         </dependency>
-    </dependencies>
+
+        <!--  阿里云的短信服务     -->
+        <!-- 阿里云号码认证服务（短信认证核心） -->
+</dependencies>
 </project>
