@@ -22,4 +22,8 @@ public interface RoomInfoMapper extends BaseMapper<RoomInfo> {
 
 	//最低租金
 	BigDecimal selectMinRentByApartmentId(Long apartmentId);
+
+	//根据公寓id分页查询房间列表
+	IPage<RoomItemVo> pageRoomItemVoByApartmentId(IPage<RoomItemVo> page, Long id);
+
 }

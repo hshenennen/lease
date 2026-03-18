@@ -111,6 +111,12 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		roomDetailVo.setLeaseTermList(leaseTermList);
 		return roomDetailVo;
 	}
+
+	//根据公寓id分页查询房间列表
+	@Override
+	public IPage<RoomItemVo> pageRoomItemVoByApartmentId(IPage<RoomItemVo> page, Long id) {
+		return roomInfoMapper.pageRoomItemVoByApartmentId(page, id);
+	}
 }
 
 
