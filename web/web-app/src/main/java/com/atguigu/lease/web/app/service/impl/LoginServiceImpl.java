@@ -6,6 +6,7 @@ import com.atguigu.lease.common.result.ResultCodeEnum;
 import com.atguigu.lease.common.utils.JwtUtil;
 import com.atguigu.lease.model.entity.UserInfo;
 import com.atguigu.lease.model.enums.BaseStatus;
+import com.atguigu.lease.web.app.mapper.UserInfoMapper;
 import com.atguigu.lease.web.app.service.LoginService;
 import com.atguigu.lease.web.app.service.UserInfoService;
 import com.atguigu.lease.web.app.vo.user.LoginVo;
@@ -27,6 +28,9 @@ public class LoginServiceImpl implements LoginService {
 
 	@Autowired
 	private UserInfoService userInfoService;//用户信息
+
+	@Autowired
+	private UserInfoMapper userInfoMapper;
 
 	//获取短信验证码
 	@Override
@@ -64,8 +68,7 @@ public class LoginServiceImpl implements LoginService {
 			throw new LeaseException(ResultCodeEnum.APP_LOGIN_CODE_ERROR);
 		}
 		//3.判断用户是否存在,不存在则注册（创建用户）
-		LambdaQueryWrapper<UserInfo> userInfoLambdaQueryWrapper = new LambdaQueryWrapper<UserInfo>()
-				.eq(UserInfo::getPhone, loginVo.getPhone());
+		LambdaQueryWrapper<UserInfo> userInfoLambdaQueryWrapper = new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getPhone, loginVo.getPhone());
 		UserInfo userInfo = userInfoService.getOne(userInfoLambdaQueryWrapper);
 		if (userInfo == null) {
 			//创建用户
@@ -83,5 +86,14 @@ public class LoginServiceImpl implements LoginService {
 
 		//5.创建并返回token
 		return JwtUtil.createToken(userInfo.getId(), userInfo.getPhone());
+	}
+
+	//获取登录用户信息
+	@Override
+	public UserInfoVo getUserInfoVo(Long userId) {
+		UserInfo userInfo = userInfoMapper.selectById(userId);
+
+		//返回结果
+		return new UserInfoVo(userInfo.getNickname(), userInfo.getAvatarUrl());
 	}
 }
