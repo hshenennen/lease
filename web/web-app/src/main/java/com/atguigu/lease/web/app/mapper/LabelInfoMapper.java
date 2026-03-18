@@ -13,6 +13,9 @@ import java.util.List;
 */
 public interface LabelInfoMapper extends BaseMapper<LabelInfo> {
 
+	List<LabelInfo> getLabelInfoByApartmentId(Long apartmentId);
+
+	List<LabelInfo> getLabelInfoByRoomtId(Long id);
 }
 
 

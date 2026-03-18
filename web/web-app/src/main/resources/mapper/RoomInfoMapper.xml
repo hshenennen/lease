@@ -96,4 +96,12 @@
                        and room_id = #{id})
 
     </select>
+    <!-- 最低租金-->
+    <select id="selectMinRentByApartmentId" resultType="java.math.BigDecimal" parameterType="java.lang.Long">
+        select min(rent)
+        from room_info
+        where is_deleted = 0
+          and is_release = 1
+          and apartment_id = #{apartmentId}
+    </select>
 </mapper>

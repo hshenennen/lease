@@ -1,6 +1,7 @@
 package com.atguigu.lease.web.app.service;
 
 import com.atguigu.lease.model.entity.RoomInfo;
+import com.atguigu.lease.web.app.vo.room.RoomDetailVo;
 import com.atguigu.lease.web.app.vo.room.RoomItemVo;
 import com.atguigu.lease.web.app.vo.room.RoomQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -14,4 +15,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface RoomInfoService extends IService<RoomInfo> {
 	//分页查询房间列表
 	IPage<RoomItemVo> pageRoomItemVo(IPage<RoomItemVo> page, RoomQueryVo queryVo);
+
+	//根据id获取房间的详细信息
+	RoomDetailVo getDetailById(Long id);
 }
