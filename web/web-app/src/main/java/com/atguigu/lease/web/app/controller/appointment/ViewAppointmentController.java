@@ -34,7 +34,9 @@ public class ViewAppointmentController {
 	@Operation(summary = "查询个人预约看房列表")
 	@GetMapping("listItem")
 	public Result<List<AppointmentItemVo>> listItem() {
-		return Result.ok();
+		Long userId = LoginUserHolder.getLoginUser().getUserId();
+		List<AppointmentItemVo> appointmentItemVoList = viewAppointmentService.getAppointmentItemVoListByUserId(userId);
+		return Result.ok(appointmentItemVoList);
 	}
 
 	@GetMapping("getDetailById")
