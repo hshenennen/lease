@@ -1,9 +1,11 @@
 package com.atguigu.lease.web.app.service.impl;
 
+import com.atguigu.lease.common.login.LoginUserHolder;
 import com.atguigu.lease.model.entity.*;
 import com.atguigu.lease.model.enums.ItemType;
 import com.atguigu.lease.web.app.mapper.*;
 import com.atguigu.lease.web.app.service.ApartmentInfoService;
+import com.atguigu.lease.web.app.service.BrowsingHistoryService;
 import com.atguigu.lease.web.app.service.RoomInfoService;
 import com.atguigu.lease.web.app.vo.apartment.ApartmentItemVo;
 import com.atguigu.lease.web.app.vo.attr.AttrValueVo;
@@ -17,6 +19,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +62,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 	@Autowired
 	private LeaseTermMapper leaseTermMapper;//租期
 
+	@Autowired
+	private BrowsingHistoryService browsingHistoryService;//浏览历史
+
 	//分页查询房间列表
 	@Override
 	public IPage<RoomItemVo> pageRoomItemVo(IPage<RoomItemVo> page, RoomQueryVo queryVo) {
@@ -73,29 +79,31 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		if (roomInfo == null) {
 			return null;
 		}
+		Long roomInfoId = roomInfo.getId();//房间id
+		Long apartmentId = roomInfo.getApartmentId();//公寓id
 		//公寓信息
-		ApartmentItemVo apartmentItemVo = apartmentInfoService.getApartmentItemVoByroomId(roomInfo.getApartmentId());
+		ApartmentItemVo apartmentItemVo = apartmentInfoService.getApartmentItemVoByroomId(apartmentId);
 
 		//图片列表
-		List<GraphVo> graphVoList = graphInfoMapper.getgraphVoList(ItemType.ROOM, roomInfo.getId());
+		List<GraphVo> graphVoList = graphInfoMapper.getgraphVoList(ItemType.ROOM, roomInfoId);
 
 		//属性信息列表
-		List<AttrValueVo> attrValueVoList = attrValueMapper.getattrValueVoListByRoomId(roomInfo.getId());
+		List<AttrValueVo> attrValueVoList = attrValueMapper.getattrValueVoListByRoomId(roomInfoId);
 
 		//配套信息列表
-		List<FacilityInfo> facilityInfoList = facilityInfoMapper.getFacilityInfoListByRoomId(roomInfo.getId());
+		List<FacilityInfo> facilityInfoList = facilityInfoMapper.getFacilityInfoListByRoomId(roomInfoId);
 
 		//标签信息列表
-		List<LabelInfo> labelInfoList = labelInfoMapper.getLabelInfoByRoomtId(roomInfo.getId());
+		List<LabelInfo> labelInfoList = labelInfoMapper.getLabelInfoByRoomtId(roomInfoId);
 
 		//支付方式列表
-		List<PaymentType> paymentTypeList = paymentTypeMapper.getPaymentTypeListByRoomId(roomInfo.getId());
+		List<PaymentType> paymentTypeList = paymentTypeMapper.getPaymentTypeListByRoomId(roomInfoId);
 
 		//杂费列表
-		List<FeeValueVo> feeValueVoList = feeValueMapper.getFeeValueVoListByApartmentId(roomInfo.getApartmentId());
+		List<FeeValueVo> feeValueVoList = feeValueMapper.getFeeValueVoListByApartmentId(apartmentId);
 
 		//租期列表
-		List<LeaseTerm> leaseTermList = leaseTermMapper.getleaseTermListByRoomId(roomInfo.getId());
+		List<LeaseTerm> leaseTermList = leaseTermMapper.getleaseTermListByRoomId(roomInfoId);
 
 
 		//封装返回结果
@@ -109,6 +117,11 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		roomDetailVo.setPaymentTypeList(paymentTypeList);
 		roomDetailVo.setFeeValueVoList(feeValueVoList);
 		roomDetailVo.setLeaseTermList(leaseTermList);
+
+		//保存浏览历史
+		browsingHistoryService.saveHistory(LoginUserHolder.getLoginUser().getUserId(), roomInfoId);
+
+
 		return roomDetailVo;
 	}
 

@@ -6,11 +6,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
-* @author liubo
-* @description 针对表【browsing_history(浏览历史)】的数据库操作Service
-* @createDate 2023-07-26 11:12:39
-*/
+ * @author liubo
+ * @description 针对表【browsing_history(浏览历史)】的数据库操作Service
+ * @createDate 2023-07-26 11:12:39
+ */
 public interface BrowsingHistoryService extends IService<BrowsingHistory> {
 	//获取浏览历史
-	IPage<HistoryItemVo> pageHistoryItemVoByUserId(IPage<HistoryItemVo> page,Long userId);
+	IPage<HistoryItemVo> pageHistoryItemVoByUserId(IPage<HistoryItemVo> page, Long userId);
+
+	//保存浏览历史
+	void saveHistory(Long userId, Long roomInfoId);
 }
