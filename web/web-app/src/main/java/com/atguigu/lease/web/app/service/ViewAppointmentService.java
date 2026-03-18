@@ -1,6 +1,7 @@
 package com.atguigu.lease.web.app.service;
 
 import com.atguigu.lease.model.entity.ViewAppointment;
+import com.atguigu.lease.web.app.vo.appointment.AppointmentDetailVo;
 import com.atguigu.lease.web.app.vo.appointment.AppointmentItemVo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -14,4 +15,7 @@ import java.util.List;
 public interface ViewAppointmentService extends IService<ViewAppointment> {
 	//查询个人预约看房列表
 	List<AppointmentItemVo> getAppointmentItemVoListByUserId(Long userId);
+
+	//根据ID查询预约详情信息
+	AppointmentDetailVo getAppointmentDetailVoById(Long id);
 }

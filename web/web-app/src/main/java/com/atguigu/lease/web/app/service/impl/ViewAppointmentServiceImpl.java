@@ -1,10 +1,16 @@
 package com.atguigu.lease.web.app.service.impl;
 
+import com.atguigu.lease.model.entity.ApartmentInfo;
 import com.atguigu.lease.model.entity.ViewAppointment;
 import com.atguigu.lease.web.app.mapper.ViewAppointmentMapper;
+import com.atguigu.lease.web.app.service.ApartmentInfoService;
 import com.atguigu.lease.web.app.service.ViewAppointmentService;
+import com.atguigu.lease.web.app.vo.apartment.ApartmentDetailVo;
+import com.atguigu.lease.web.app.vo.apartment.ApartmentItemVo;
+import com.atguigu.lease.web.app.vo.appointment.AppointmentDetailVo;
 import com.atguigu.lease.web.app.vo.appointment.AppointmentItemVo;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,16 +23,36 @@ import java.util.List;
  */
 @Service
 public class ViewAppointmentServiceImpl extends ServiceImpl<ViewAppointmentMapper, ViewAppointment>
-        implements ViewAppointmentService {
+		implements ViewAppointmentService {
 
 	@Autowired
-	private  ViewAppointmentMapper viewAppointmentMapper;
+	private ViewAppointmentMapper viewAppointmentMapper;//预约看房
+
+	@Autowired
+	private ApartmentInfoService apartmentInfoService;
 
 	//查询个人预约看房列表
 	@Override
 	public List<AppointmentItemVo> getAppointmentItemVoListByUserId(Long userId) {
 
 		return viewAppointmentMapper.getAppointmentItemVoListByUserId(userId);
+	}
+
+	//根据ID查询预约详情信息
+	@Override
+	public AppointmentDetailVo getAppointmentDetailVoById(Long id) {
+		ViewAppointment viewAppointment = viewAppointmentMapper.selectById(id);
+
+		ApartmentItemVo apartmentItemVo = new ApartmentItemVo();
+		ApartmentDetailVo detailById = apartmentInfoService.getDetailById(viewAppointment.getApartmentId());
+		BeanUtils.copyProperties(detailById, apartmentItemVo);
+
+		//封装返回值
+		AppointmentDetailVo appointmentDetailVo = new AppointmentDetailVo();
+		BeanUtils.copyProperties(viewAppointment, appointmentDetailVo);
+		appointmentDetailVo.setApartmentItemVo(apartmentItemVo);
+
+		return appointmentDetailVo;
 	}
 }
 
