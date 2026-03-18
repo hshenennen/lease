@@ -17,4 +17,6 @@ import java.math.BigDecimal;
 */
 public interface RoomInfoMapper extends BaseMapper<RoomInfo> {
 
+	//分页查询房间列表
+	IPage<RoomItemVo> pageRoomItemVo(IPage<RoomItemVo> page, RoomQueryVo queryVo);
 }

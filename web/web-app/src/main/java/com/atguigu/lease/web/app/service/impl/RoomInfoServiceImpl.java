@@ -3,8 +3,12 @@ package com.atguigu.lease.web.app.service.impl;
 import com.atguigu.lease.model.entity.RoomInfo;
 import com.atguigu.lease.web.app.mapper.RoomInfoMapper;
 import com.atguigu.lease.web.app.service.RoomInfoService;
+import com.atguigu.lease.web.app.vo.room.RoomItemVo;
+import com.atguigu.lease.web.app.vo.room.RoomQueryVo;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,6 +21,14 @@ import org.springframework.stereotype.Service;
 public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
         implements RoomInfoService {
 
+	@Autowired
+	private RoomInfoMapper roomInfoMapper;
+
+	//分页查询房间列表
+	@Override
+	public IPage<RoomItemVo> pageRoomItemVo(IPage<RoomItemVo> page, RoomQueryVo queryVo) {
+		return roomInfoMapper.pageRoomItemVo(page,queryVo);
+	}
 }
 
 
