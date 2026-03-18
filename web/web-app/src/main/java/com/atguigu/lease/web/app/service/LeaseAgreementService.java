@@ -1,7 +1,10 @@
 package com.atguigu.lease.web.app.service;
 
 import com.atguigu.lease.model.entity.LeaseAgreement;
+import com.atguigu.lease.web.app.vo.agreement.AgreementItemVo;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author liubo
@@ -9,4 +12,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2023-07-26 11:12:39
 */
 public interface LeaseAgreementService extends IService<LeaseAgreement> {
+	//获取个人租约基本信息列表
+	List<AgreementItemVo> getAgreementItemVoListByPhone(String phone);
 }

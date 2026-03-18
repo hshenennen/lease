@@ -3,8 +3,12 @@ package com.atguigu.lease.web.app.service.impl;
 import com.atguigu.lease.model.entity.LeaseAgreement;
 import com.atguigu.lease.web.app.mapper.LeaseAgreementMapper;
 import com.atguigu.lease.web.app.service.LeaseAgreementService;
+import com.atguigu.lease.web.app.vo.agreement.AgreementItemVo;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author liubo
@@ -13,8 +17,16 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class LeaseAgreementServiceImpl extends ServiceImpl<LeaseAgreementMapper, LeaseAgreement>
-        implements LeaseAgreementService {
+		implements LeaseAgreementService {
 
+	@Autowired
+	private LeaseAgreementMapper leaseAgreementMapper;
+
+	//获取个人租约基本信息列表
+	@Override
+	public List<AgreementItemVo> getAgreementItemVoListByPhone(String phone) {
+		return leaseAgreementMapper.getAgreementItemVoListByPhone(phone);
+	}
 }
 
 
