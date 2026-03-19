@@ -51,6 +51,7 @@ public class LeaseAgreementController {
 	@Operation(summary = "保存或更新租约", description = "用于续约")
 	@PostMapping("saveOrUpdate")
 	public Result saveOrUpdate(@RequestBody LeaseAgreement leaseAgreement) {
+		leaseAgreementService.saveOrUpdate(leaseAgreement);
 		return Result.ok();
 	}
 
