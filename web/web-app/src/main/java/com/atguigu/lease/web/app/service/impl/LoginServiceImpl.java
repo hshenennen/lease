@@ -40,8 +40,8 @@ public class LoginServiceImpl implements LoginService {
 
 		//生成验证码
 		SecureRandom random = new SecureRandom();
-		int fourDigit = 1000 + random.nextInt(9000); // 1000-9999
-		String code = String.valueOf(fourDigit);//int转换String
+		int sixDigit = random.nextInt(1000000); // 0-999999
+		String code = String.format("%06d", sixDigit);
 		System.out.println("验证码：" + code);
 
 		// 将验证码存入 Redis，60秒过期
