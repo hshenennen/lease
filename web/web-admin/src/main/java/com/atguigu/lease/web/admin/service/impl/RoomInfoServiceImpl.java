@@ -1,5 +1,6 @@
 package com.atguigu.lease.web.admin.service.impl;
 
+import com.atguigu.lease.common.constant.RedisConstant;
 import com.atguigu.lease.model.entity.*;
 import com.atguigu.lease.model.enums.ItemType;
 import com.atguigu.lease.web.admin.mapper.*;
@@ -15,6 +16,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -73,6 +75,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 	@Autowired
 	private LeaseTermMapper leaseTermMapper;//可选租期-Mapper
 
+	@Autowired
+	private RedisTemplate<String,Object> redisTemplate;
+
 	//保存或更新房间信息
 	@Override
 	//@Transactional//事件管理
@@ -107,6 +112,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 			LambdaQueryWrapper<RoomLeaseTerm> roomLeaseTermLambdaQueryWrapper = new LambdaQueryWrapper<RoomLeaseTerm>()
 					.eq(RoomLeaseTerm::getRoomId, roomSubmitVo.getId());
 			roomLeaseTermService.remove(roomLeaseTermLambdaQueryWrapper);
+
+			//7.删除缓存
+			redisTemplate.delete(RedisConstant.APP_LOGIN_PREFIX + roomSubmitVo.getId());
 		}
 		//添加(重新)内容
 		//1.添加图片
@@ -242,36 +250,39 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 	//根据id删除房间信息
 	@Override
 	public void removeRoomById(Long id) {
-		//删除房间的基本信息
+		//1.删除房间的基本信息
 		super.removeById(id);
 
 		//删除房间配套的信息
-		//1.删除图片
+		//2.删除图片
 		LambdaQueryWrapper<GraphInfo> graphInfoLambdaQueryWrapper = new LambdaQueryWrapper<GraphInfo>()
 				.eq(GraphInfo::getItemType, ItemType.ROOM)
 				.eq(GraphInfo::getItemId, id);
 		graphInfoService.remove(graphInfoLambdaQueryWrapper);
-		//2.删除属性
+		//3.删除属性
 		LambdaQueryWrapper<RoomAttrValue> attrValueLambdaQueryWrapper = new LambdaQueryWrapper<RoomAttrValue>()
 				.eq(RoomAttrValue::getRoomId, id);
 		roomAttrValueService.remove(attrValueLambdaQueryWrapper);
-		//3.删除配套
+		//4.删除配套
 		LambdaQueryWrapper<RoomFacility> roomFacilityLambdaQueryWrapper = new LambdaQueryWrapper<RoomFacility>()
 				.eq(RoomFacility::getRoomId, id);
 		roomFacilityService.remove(roomFacilityLambdaQueryWrapper);
-		//4.删除标签
+		//5.删除标签
 		LambdaQueryWrapper<RoomLabel> roomLabelLambdaQueryWrapper = new LambdaQueryWrapper<RoomLabel>()
 				.eq(RoomLabel::getRoomId, id);
 		roomLabelService.remove(roomLabelLambdaQueryWrapper);
-		//5.删除支付方式
+		//6.删除支付方式
 		LambdaQueryWrapper<RoomPaymentType> roomPaymentTypeLambdaQueryWrapper = new LambdaQueryWrapper<RoomPaymentType>()
 				.eq(RoomPaymentType::getRoomId, id);
 		roomPaymentTypeService.remove(roomPaymentTypeLambdaQueryWrapper);
 
-		//6.删除可选租期
+		//7.删除可选租期
 		LambdaQueryWrapper<RoomLeaseTerm> roomLeaseTermLambdaQueryWrapper = new LambdaQueryWrapper<RoomLeaseTerm>()
 				.eq(RoomLeaseTerm::getRoomId, id);
 		roomLeaseTermService.remove(roomLeaseTermLambdaQueryWrapper);
+
+		//8.删除缓存
+		redisTemplate.delete(RedisConstant.APP_ROOM_PREFIX + id);
 
 	}
 }

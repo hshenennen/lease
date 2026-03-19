@@ -1,5 +1,6 @@
 package com.atguigu.lease.web.app.service.impl;
 
+import com.atguigu.lease.common.constant.RedisConstant;
 import com.atguigu.lease.common.login.LoginUserHolder;
 import com.atguigu.lease.model.entity.*;
 import com.atguigu.lease.model.enums.ItemType;
@@ -19,7 +20,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +66,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 	@Autowired
 	private BrowsingHistoryService browsingHistoryService;//浏览历史
 
+	@Autowired
+	private RedisTemplate<String,Object> redisTemplate;
+
 	//分页查询房间列表
 	@Override
 	public IPage<RoomItemVo> pageRoomItemVo(IPage<RoomItemVo> page, RoomQueryVo queryVo) {
@@ -75,12 +79,18 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 	@Override
 	@Transactional
 	public RoomDetailVo getDetailById(Long id) {
+
+		String key = RedisConstant.APP_ROOM_PREFIX + id;
+		RoomDetailVo roomDetailVo = (RoomDetailVo) redisTemplate.opsForValue().get(key);
+
 		RoomInfo roomInfo = roomInfoMapper.selectById(id);//房间基本信息
 		if (roomInfo == null) {
 			return null;
 		}
 		Long roomInfoId = roomInfo.getId();//房间id
 		Long apartmentId = roomInfo.getApartmentId();//公寓id
+
+		if (roomDetailVo == null) {
 		//公寓信息
 		ApartmentItemVo apartmentItemVo = apartmentInfoService.getApartmentItemVoByroomId(apartmentId);
 
@@ -107,7 +117,7 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 
 
 		//封装返回结果
-		RoomDetailVo roomDetailVo = new RoomDetailVo();
+		 roomDetailVo = new RoomDetailVo();
 		BeanUtils.copyProperties(roomInfo, roomDetailVo);
 		roomDetailVo.setApartmentItemVo(apartmentItemVo);
 		roomDetailVo.setGraphVoList(graphVoList);
@@ -117,6 +127,9 @@ public class RoomInfoServiceImpl extends ServiceImpl<RoomInfoMapper, RoomInfo>
 		roomDetailVo.setPaymentTypeList(paymentTypeList);
 		roomDetailVo.setFeeValueVoList(feeValueVoList);
 		roomDetailVo.setLeaseTermList(leaseTermList);
+
+			redisTemplate.opsForValue().set(key, roomDetailVo);
+		}
 
 		//保存浏览历史
 		browsingHistoryService.saveHistory(LoginUserHolder.getLoginUser().getUserId(), roomInfoId);
