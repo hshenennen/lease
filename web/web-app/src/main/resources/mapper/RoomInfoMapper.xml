@@ -69,7 +69,7 @@
             </if>
         </where>
         <if test="queryVo.orderType == 'desc' or queryVo.orderType == 'asc'">
-            order by ri.rent =#{queryVo.orderType}
+            order by ri.rent ${queryVo.orderType}
         </if>
 
 
